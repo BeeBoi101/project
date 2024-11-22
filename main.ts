@@ -15,10 +15,13 @@ sprites.onOverlap(SpriteKind.goal2, SpriteKind.ball, function (sprite, otherSpri
     otherSprite.vx = -50
     otherSprite.setPosition(80, 60)
     info.player2.changeLifeBy(-1)
+    speed = 0
+    mySprite2.vx = 0
 })
 sprites.onOverlap(SpriteKind.playerOne, SpriteKind.ball, function (sprite, otherSprite) {
-    speed += 1
+    speed += 2
     mySprite2.vx = 50 + speed
+    mySprite2.vy = 0.5 * mySprite.vy
 })
 scene.onHitWall(SpriteKind.playerOne, function (sprite, location) {
     jumped1 = 1
@@ -56,14 +59,17 @@ sprites.onOverlap(SpriteKind.goal1, SpriteKind.ball, function (sprite, otherSpri
     otherSprite.vx = 50
     otherSprite.setPosition(80, 60)
     info.player1.changeLifeBy(-1)
+    speed = 0
+    mySprite2.vx = 0
 })
 info.player1.onLifeZero(function () {
     game.setGameOverMessage(true, "p2 wins")
     game.gameOver(true)
 })
 sprites.onOverlap(SpriteKind.player2, SpriteKind.ball, function (sprite, otherSprite) {
-    speed += 1
+    speed += 2
     mySprite2.vx = -50 - speed
+    mySprite2.vy = 0.5 * ham.vy
 })
 info.player2.onLifeZero(function () {
     game.setGameOverMessage(true, "p1 wins")
@@ -384,5 +390,5 @@ mySprite2 = sprites.create(img`
     `, SpriteKind.ball)
 mySprite2.ay = 150
 mySprite2.setBounceOnWall(true)
-mySprite2.vx = 50
+mySprite2.vx = 0
 mySprite2.setStayInScreen(true)
