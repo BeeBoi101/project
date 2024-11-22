@@ -17,11 +17,17 @@ sprites.onOverlap(SpriteKind.goal2, SpriteKind.ball, function (sprite, otherSpri
     info.player2.changeLifeBy(-1)
     speed = 0
     mySprite2.vx = 0
+    mySprite2.vy = 0
 })
 sprites.onOverlap(SpriteKind.playerOne, SpriteKind.ball, function (sprite, otherSprite) {
     speed += 2
     mySprite2.vx = 50 + speed
     mySprite2.vy = 0.5 * mySprite.vy
+    statusbar.value += 5
+    if (statusbar.value == 100) {
+        mySprite2.vy = 200
+        statusbar.value = 0
+    }
 })
 scene.onHitWall(SpriteKind.playerOne, function (sprite, location) {
     jumped1 = 1
@@ -61,15 +67,23 @@ sprites.onOverlap(SpriteKind.goal1, SpriteKind.ball, function (sprite, otherSpri
     info.player1.changeLifeBy(-1)
     speed = 0
     mySprite2.vx = 0
+    mySprite2.vy = 0
 })
 info.player1.onLifeZero(function () {
     game.setGameOverMessage(true, "p2 wins")
     game.gameOver(true)
 })
 sprites.onOverlap(SpriteKind.player2, SpriteKind.ball, function (sprite, otherSprite) {
-    speed += 2
-    mySprite2.vx = -50 - speed
-    mySprite2.vy = 0.5 * ham.vy
+    if (1 >= ham.vx) {
+        speed += 2
+        mySprite2.vx = -50 - speed
+        mySprite2.vy = 0.5 * mySprite.vy
+        _2ndbar.value += 5
+    }
+    if (_2ndbar.value == 100) {
+        mySprite2.vy = 200
+        _2ndbar.value = 0
+    }
 })
 info.player2.onLifeZero(function () {
     game.setGameOverMessage(true, "p1 wins")
@@ -99,6 +113,10 @@ controller.player2.onEvent(ControllerEvent.Connected, function () {
     ham.setPosition(150, -3)
     ham.setStayInScreen(true)
     info.player2.setLife(5)
+    _2ndbar = statusbars.create(20, 4, StatusBarKind.Energy)
+    _2ndbar.attachToSprite(ham)
+    _2ndbar.value = 0
+    _2ndbar.setColor(7, 8)
 })
 scene.onHitWall(SpriteKind.player2, function (sprite, location) {
     jumped2 = 1
@@ -127,9 +145,15 @@ controller.player1.onEvent(ControllerEvent.Connected, function () {
     mySprite.setPosition(0, -3)
     mySprite.setStayInScreen(true)
     info.player1.setLife(5)
+    statusbar = statusbars.create(20, 4, StatusBarKind.Energy)
+    statusbar.attachToSprite(mySprite)
+    statusbar.value = 0
+    statusbar.setColor(7, 2)
 })
+let _2ndbar: StatusBarSprite = null
 let ham: Sprite = null
 let jumped2 = 0
+let statusbar: StatusBarSprite = null
 let mySprite: Sprite = null
 let jumped1 = 0
 let mySprite2: Sprite = null
@@ -383,10 +407,14 @@ _5.setPosition(159, 60)
 speed = 0
 map()
 mySprite2 = sprites.create(img`
-    1 1 1 1 
-    1 1 1 1 
-    1 1 1 1 
-    1 1 1 1 
+    . . 1 1 1 1 . . 
+    . 1 1 1 1 1 1 . 
+    1 1 1 1 1 1 1 1 
+    1 1 1 1 1 1 1 1 
+    1 1 1 1 1 1 1 1 
+    1 1 1 1 1 1 1 1 
+    . 1 1 1 1 1 1 . 
+    . . 1 1 1 1 . . 
     `, SpriteKind.ball)
 mySprite2.ay = 150
 mySprite2.setBounceOnWall(true)
